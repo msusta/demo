@@ -65,14 +65,6 @@ Resources:
       GroupId: !Ref SecurityGroup
       IpProtocol: tcp
       ToPort: 22
-  RDPInFromInternet:
-    Type: "AWS::EC2::SecurityGroupIngress"
-    Properties:
-      CidrIp: "0.0.0.0/0"
-      FromPort: 3389
-      GroupId: !Ref SecurityGroup
-      IpProtocol: tcp
-      ToPort: 3389
 
 Outputs:
   InstanceId:
