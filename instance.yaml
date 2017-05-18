@@ -47,7 +47,7 @@ Resources:
           SubnetId: !Ref SubnetId
       Tags:
         - Key: Name
-          Value: !Join [ "-" [ "demo", !Ref Environment ] ]
+          Value: !Join [ "-", [ "demo", !Ref Environment ] ]
 
   SecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
@@ -55,7 +55,7 @@ Resources:
       GroupDescription: "demo-instance"
       Tags:
         - Key: Name
-          Value: !Join [ "-" [ "demo", !Ref Environment ] ]
+          Value: !Join [ "-", [ "demo", !Ref Environment ] ]
       VpcId: !Ref VpcId
   SSHInFromInternet:
     Type: "AWS::EC2::SecurityGroupIngress"
