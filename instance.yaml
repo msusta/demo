@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Single instance
+
+Parameters:
+  AmiId:
+    Description: AMI for the EC2 Instance
+    Default: ami-b968bad6
+    Type: 'AWS::EC2::Image::Id'
+  InstanceType:
+    AllowedValues:
+      - t2.small
+      - t2.medium
+    Description: Instance Type
+    Default: "t2.small"
+    Type: String
+  KeyName:
+    Default: sustbmat
+    Description: Access key name
+    Type: 'AWS::EC2::KeyPair::KeyName'
+  SubnetId:
+    Default: subnet-1148e779
+    Description: Subnet ID for the Availability Zone
+    Type: 'AWS::EC2::Subnet::Id'
+  VpcId:
+    Default: vpc-0b07ec63
+    Description: VPC ID for the Security Group
+    Type: 'AWS::EC2::VPC::Id'
+
+Resources:
+  Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeleteOnTermination: true
+          DeviceIndex: 0
+          GroupSet: [ !Ref SecurityGroup ]
+          SubnetId: !Ref SubnetId
+      Tags:
+        - Key: Name
+          Value: "demo-instance"
+
+  SecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "DaWinci App server"
+      Tags:
+        - Key: Name
+          Value: "demo-sg"
+      VpcId: !Ref VpcId
+  SSHInFromInternet:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      CidrIp: "0.0.0.0/0"
+      FromPort: 22
+      GroupId: !Ref SecurityGroup
+      IpProtocol: tcp
+      ToPort: 22
+
+Outputs:
+  InstanceId:
+    Description: Id
+    Value: !Ref Instance
+  PrivateDnsName:
+    Description: Internal DNS name in VPC
+    Value: !GetAtt [Instance, PrivateDnsName]
+  PrivateIp:
+    Description: Private IP address in VPC
+    Value: !GetAtt [Instance, PrivateIp]
