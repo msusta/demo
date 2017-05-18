@@ -1,6 +1,5 @@
-[
-  {
-    "ParameterKey": "Environment",
-    "ParameterValue": "stage"
+{
+  "Parameters" : {
+    "Environment" : "stage"
   }
-]
+}
