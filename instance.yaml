@@ -6,6 +6,12 @@ Parameters:
     Description: AMI for the EC2 Instance
     Default: ami-b968bad6
     Type: 'AWS::EC2::Image::Id'
+  Environment:
+    AllowedValues:
+      - stage
+      - prod
+    Default: stage
+    Type: String
   InstanceType:
     AllowedValues:
       - t2.small
@@ -41,15 +47,15 @@ Resources:
           SubnetId: !Ref SubnetId
       Tags:
         - Key: Name
-          Value: "demo-instance"
+          Value: !Join [ "-" [ "demo", !Ref Environment ] ]
 
   SecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: "DaWinci App server"
+      GroupDescription: "demo-instance"
       Tags:
         - Key: Name
-          Value: "demo-sg"
+          Value: !Join [ "-" [ "demo", !Ref Environment ] ]
       VpcId: !Ref VpcId
   SSHInFromInternet:
     Type: "AWS::EC2::SecurityGroupIngress"
